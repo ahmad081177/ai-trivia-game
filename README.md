@@ -16,7 +16,7 @@ A Streamlit-based interactive trivia game powered by Google's Gemini AI. This ap
 
 1. Clone the repository or download the source code:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/ahmad081177/ai-trivia-game.git
    cd ai-trivia-game
    ```
 
@@ -25,11 +25,11 @@ A Streamlit-based interactive trivia game powered by Google's Gemini AI. This ap
    pip install -r requirements.txt
    ```
 
-3. Create a `.env` file in the project root directory with your Gemini API key:
+3. Create a `.env` file in the project root directory with your Gemini API key, Or you could rename ```.env.example``` to ```.env```:
    ```
    GEMINI_API_KEY=your_gemini_api_key_here
    ```
-   (Opyionla) You may also create the following keys, if not then the system will use the defaults:
+   (Optional) You may also create the following keys, if not then the system will use the defaults:
 
    ```
    GEMINI_MODEL="gemini-2.0-flash"
@@ -38,21 +38,22 @@ A Streamlit-based interactive trivia game powered by Google's Gemini AI. This ap
 
 4. Ensure all files are in the correct structure:
    ```
-   project_folder/
-   ├── .env
-   ├── app.py
+   ai-trivia-game/
+   ├── .env (rename .env.example to .env)
+   ├── .gitignore (Not important for running the app)
+   ├── app.py (Main python code)
    ├── app.svg
-   ├── README.md
-   ├── requirements.txt
-   ├── runme.bat
-   └── style.css
+   ├── README.md (This file)
+   ├── requirements.txt (list of python libraries to be installed prio running the app)
+   ├── runme.bat (command batch file to run the application)
+   └── style.css (css file)
    ```
 
 ## How to Run
 
 1. Navigate to the project directory in your terminal:
    ```cmd
-   cd project_folder
+   cd ai-trivia-game
    ```
 
 2. Start the Streamlit application:

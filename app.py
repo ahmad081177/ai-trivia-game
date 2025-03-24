@@ -2,7 +2,7 @@ import streamlit as st
 import google.generativeai as genai
 import os
 from dotenv import load_dotenv
-
+from llm_utils import get_ai_response
 # Load environment variables
 load_dotenv()
 
@@ -20,19 +20,6 @@ def load_css(css_file):
 
 load_css("style.css")
 
-# Initialize Gemini API
-def configure_gemini():
-    api_key = os.getenv("GEMINI_API_KEY")
-    if not api_key:
-        st.error("Please set your GEMINI_API_KEY in the .env file")
-        st.stop()
-    genai.configure(api_key=api_key)
-    return genai
-
-# Get model configuration
-def get_model_config():
-    return os.getenv("GEMINI_MODEL", "gemini-pro"), float(os.getenv("TEMPERATURE", "0.7"))
-
 # Session state initialization
 def initialize_session_state():
     defaults = {
@@ -47,45 +34,6 @@ def initialize_session_state():
         if key not in st.session_state:
             st.session_state[key] = value
 
-# Get AI response
-def get_ai_response(prompt):
-    client = configure_gemini()
-    model_name, temperature = get_model_config()
-    
-    system_prompt = """
-    You are Quizzy, an AI trivia game host. Create a fun, interactive trivia experience.
-    Guidelines:
-    - Match the user's language (English, Hebrew, Arabic, etc.).
-    - Keep a friendly, encouraging tone.
-    - Gameplay:
-      1. If no topic is set, suggest topics or ask for one.
-      2. Once a topic is chosen, ask a trivia question.
-      3. When answering:
-         - Say if they're correct (use "CORRECT" or "INCORRECT" clearly)
-         - Give feedback and extra info
-         - Ask if they want another question
-      4. Be flexible with topic changes or game resets.
-    """
-    
-    try:
-        model = client.GenerativeModel(
-            model_name=model_name,
-            generation_config={"temperature": temperature}
-        )
-        
-        # Convert conversation history to Gemini-compatible format
-        content = [system_prompt]
-        for message in st.session_state.conversation_history:
-            role = message["role"]
-            msg_content = message["content"]
-            content.append(f"{role}: {msg_content}")
-        content.append(f"user: {prompt}")
-        
-        response = model.generate_content(content)
-        return response.text
-    except Exception as e:
-        st.error(f"AI Error: {str(e)}")
-        return "Sorry, I'm having trouble. Try again!"
 
 # Process user message
 def process_user_message(user_message):
@@ -93,7 +41,11 @@ def process_user_message(user_message):
     st.session_state.conversation_history.append({"role": "user", "content": user_message})
     
     with st.spinner("Quizzy is thinking..."):
-        ai_response = get_ai_response(user_message)
+        ai_response, error = get_ai_response(user_message, st.session_state.conversation_history)
+    
+    if error:
+        st.error(error)
+        return error
     
     if st.session_state.awaiting_answer:
         if "CORRECT" in ai_response.upper():
