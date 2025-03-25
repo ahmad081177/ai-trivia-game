@@ -8,7 +8,7 @@ A Streamlit-based interactive trivia game powered by Google's Gemini AI. This ap
 
 ### Prerequisites
 
-- Python 3.7 or higher
+- Python 3.10 or higher
 - Google Cloud account with Gemini API enabled
 - Gemini API key
 
@@ -43,6 +43,7 @@ A Streamlit-based interactive trivia game powered by Google's Gemini AI. This ap
    ├── .gitignore (Not important for running the app)
    ├── app.py (Main python code)
    ├── app.svg
+   ├── llm_utils.py
    ├── README.md (This file)
    ├── requirements.txt (list of python libraries to be installed prio running the app)
    ├── runme.bat (command batch file to run the application)
@@ -107,8 +108,9 @@ The app follows a modular, efficient design:
    - Real-time session state management
 
 2. **AI Integration Layer**:
-   - Google Gemini Pro API for natural language processing
+   - Google Gemini API for natural language processing
    - Context-aware conversation tracking
+   - History aware
    - Seamless multi-language support
 
 3. **Game Logic Layer**:
